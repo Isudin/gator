@@ -26,7 +26,7 @@ func (c *commands) run(s *state, cmd command) error {
 }
 
 func handlerLogin(s *state, cmd command) error {
-	if cmd.Args == nil || len(cmd.Args) == 0 {
+	if len(cmd.Args) == 0 {
 		return fmt.Errorf("login command expects username argument")
 	}
 
