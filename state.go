@@ -1,7 +1,11 @@
 package main
 
-import "github.com/Isudin/gator/internal/config"
+import (
+	"github.com/Isudin/gator/internal/config"
+	"github.com/Isudin/gator/internal/database"
+)
 
 type state struct {
-	Cfg *config.Config
+	cfg *config.Config
+	db  *database.Queries
 }

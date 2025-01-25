@@ -8,7 +8,7 @@ func handlerLogin(s *state, cmd command) error {
 	}
 
 	username := cmd.Args[0]
-	err := s.Cfg.SetUser(username)
+	err := s.cfg.SetUser(username)
 	if err != nil {
 		return err
 	}
