@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Isudin/gator/internal/config"
+	_ "github.com/lib/pq"
 )
 
 var st state
