@@ -40,7 +40,13 @@ func main() {
 	}
 
 	args := os.Args[1:len(os.Args)]
-	cmd := command{Name: args[0], Args: args[1:]}
+	commandName := args[0]
+	if cmds.commandsMap[commandName] == nil {
+		fmt.Printf("command '%v' not found\n", commandName)
+		os.Exit(1)
+	}
+
+	cmd := command{Name: commandName, Args: args[1:]}
 	err = cmds.run(&st, cmd)
 	if err != nil {
 		fmt.Println(err)
