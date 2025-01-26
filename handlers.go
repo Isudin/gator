@@ -118,3 +118,44 @@ func handlerAggregate(s *state, cmd command) error {
 	//fmt.Println(feed)
 	return nil
 }
+
+func handlerAddFeed(s *state, cmd command) error {
+	if len(cmd.Args) < 2 {
+		return fmt.Errorf("%v command expects name and url arguments", cmd.Name)
+	}
+
+	feedName := cmd.Args[0]
+	uri := cmd.Args[1]
+	_, err := url.ParseRequestURI(uri)
+	if err != nil {
+		return err
+	}
+
+	currentUser, err := s.db.GetUser(context.Background(), s.cfg.CurrentUser)
+	if err != nil {
+		return err
+	}
+	params := database.CreateFeedParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		Name:      feedName,
+		Url:       uri,
+		UserID:    currentUser.ID,
+	}
+
+	feed, err := s.db.CreateFeed(context.Background(), params)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Feed has been created:")
+	fmt.Printf("Name: %v\n", feed.Name)
+	fmt.Printf("UUID: %v\n", feed.ID)
+	fmt.Printf("CreatedAt: %v\n", feed.CreatedAt)
+	fmt.Printf("UpdatedAt: %v\n", feed.UpdatedAt)
+	fmt.Printf("Url: %v\n", feed.Url)
+	fmt.Printf("UserID: %v\n", feed.UserID)
+
+	return nil
+}
