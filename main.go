@@ -32,6 +32,19 @@ func main() {
 	cmds := commands{}
 	registerHandlers(&cmds)
 
+	runCommands(&cmds)
+
+	os.Exit(0)
+}
+
+func registerHandlers(cmds *commands) {
+	cmds.commandsMap = make(map[string]func(*state, command) error)
+	cmds.register("login", handlerLogin)
+	cmds.register("register", handlerRegister)
+	cmds.register("reset", handlerReset)
+}
+
+func runCommands(cmds *commands) {
 	if len(os.Args) < 2 {
 		fmt.Println("no arguments given")
 		os.Exit(1)
@@ -45,18 +58,9 @@ func main() {
 	}
 
 	cmd := command{Name: commandName, Args: args[1:]}
-	err = cmds.run(&st, cmd)
+	err := cmds.run(&st, cmd)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	os.Exit(0)
-}
-
-func registerHandlers(cmds *commands) {
-	cmds.commandsMap = make(map[string]func(*state, command) error)
-	cmds.register("login", handlerLogin)
-	cmds.register("register", handlerRegister)
-	cmds.register("reset", handlerReset)
 }
