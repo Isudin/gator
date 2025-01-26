@@ -68,6 +68,26 @@ func handlerRegister(s *state, cmd command) error {
 }
 
 func handlerReset(s *state, _ command) error {
-	err := s.db.DeleteAllUsers(context.Background())
+	err := s.db.DeleteUsers(context.Background())
 	return err
+}
+
+func handlerUsers(s *state, _ command) error {
+	users, err := s.db.GetUsers(context.Background())
+	if err != nil {
+		return err
+	}
+
+	if len(users) == 0 {
+		fmt.Println("No users found")
+	}
+
+	for _, user := range users {
+		if s.cfg.CurrentUser == user {
+			user += " (current)"
+		}
+		fmt.Printf("* %v\n", user)
+	}
+
+	return nil
 }
