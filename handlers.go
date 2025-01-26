@@ -3,15 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
+	"github.com/Isudin/gator/feed"
 	"github.com/Isudin/gator/internal/database"
 	"github.com/google/uuid"
 )
 
 func handlerLogin(s *state, cmd command) error {
 	if len(cmd.Args) == 0 {
-		return fmt.Errorf("login command expects username argument")
+		return fmt.Errorf("%v command expects username argument", cmd.Name)
 	}
 
 	username := cmd.Args[0]
@@ -32,7 +34,7 @@ func handlerLogin(s *state, cmd command) error {
 
 func handlerRegister(s *state, cmd command) error {
 	if len(cmd.Args) < 1 {
-		return fmt.Errorf("register command expects username argument")
+		return fmt.Errorf("%v command expects username argument", cmd.Name)
 	}
 
 	username := cmd.Args[0]
@@ -89,5 +91,30 @@ func handlerUsers(s *state, _ command) error {
 		fmt.Printf("* %v\n", user)
 	}
 
+	return nil
+}
+
+func handlerAggregate(s *state, cmd command) error {
+	// if len(cmd.Args) < 1 {
+	// 	return fmt.Errorf("%v command expects rss link argument", cmd.Name)
+	// }
+
+	// uri := cmd.Args[0]
+	uri := "https://www.wagslane.dev/index.xml"
+	_, err := url.ParseRequestURI(uri)
+	if err != nil {
+		return err
+	}
+
+	feed, err := feed.FetchFeed(context.Background(), uri)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("%v - %v\n", feed.Channel.Title, feed.Channel.Description)
+	for _, item := range feed.Channel.Item {
+		fmt.Printf("%v\n%v\n\n", item.Title, item.Description)
+	}
+	//fmt.Println(feed)
 	return nil
 }

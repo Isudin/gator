@@ -23,8 +23,7 @@ type RSSItem struct {
 	PubDate     string `xml:"pubDate"`
 }
 
-func fetchFeed(ctx context.Context, url string) (*RSSFeed, error) {
-	// var reader io.Reader
+func FetchFeed(ctx context.Context, url string) (*RSSFeed, error) {
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -45,8 +44,13 @@ func fetchFeed(ctx context.Context, url string) (*RSSFeed, error) {
 		return nil, err
 	}
 
-	feed.Channel.Description = html.UnescapeString(feed.Channel.Description)
 	feed.Channel.Title = html.UnescapeString(feed.Channel.Title)
+	feed.Channel.Description = html.UnescapeString(feed.Channel.Description)
+	for i, item := range feed.Channel.Item {
+		item.Title = html.UnescapeString(item.Title)
+		item.Description = html.UnescapeString(item.Description)
+		feed.Channel.Item[i] = item
+	}
 
 	return &feed, nil
 }
