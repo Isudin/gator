@@ -30,10 +30,7 @@ func main() {
 	st.db = dbqueries
 
 	cmds := commands{}
-	cmds.commandsMap = make(map[string]func(*state, command) error)
-	cmds.register("login", handlerLogin)
-	cmds.register("register", handlerRegister)
-	cmds.register("reset", handlerReset)
+	registerHandlers(&cmds)
 
 	if len(os.Args) < 2 {
 		fmt.Println("no arguments given")
@@ -55,4 +52,11 @@ func main() {
 	}
 
 	os.Exit(0)
+}
+
+func registerHandlers(cmds *commands) {
+	cmds.commandsMap = make(map[string]func(*state, command) error)
+	cmds.register("login", handlerLogin)
+	cmds.register("register", handlerRegister)
+	cmds.register("reset", handlerReset)
 }
