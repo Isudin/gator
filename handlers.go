@@ -159,3 +159,25 @@ func handlerAddFeed(s *state, cmd command) error {
 
 	return nil
 }
+
+func handlerListFeeds(s *state, _ command) error {
+	feeds, err := s.db.GetFeeds(context.Background())
+	if err != nil {
+		return err
+	}
+
+	for _, feed := range feeds {
+		fmt.Printf("Name: %v\n", feed.Name)
+		fmt.Printf("Url: %v\n", feed.Url)
+		user, err := s.db.GetUserByID(context.Background(), feed.UserID)
+		fmt.Print("User: ")
+		if err != nil {
+			fmt.Println("<user not found>")
+		} else {
+			fmt.Println(user.Name)
+		}
+		fmt.Println("---")
+	}
+
+	return nil
+}

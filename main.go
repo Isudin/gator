@@ -45,6 +45,7 @@ func registerHandlers(cmds *commands) {
 	cmds.register("users", handlerUsers)
 	cmds.register("agg", handlerAggregate)
 	cmds.register("addfeed", handlerAddFeed)
+	cmds.register("feeds", handlerListFeeds)
 }
 
 func runCommands(cmds *commands) {
