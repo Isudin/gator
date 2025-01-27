@@ -157,6 +157,12 @@ func handlerAddFeed(s *state, cmd command) error {
 	fmt.Printf("Url: %v\n", feed.Url)
 	fmt.Printf("UserID: %v\n", feed.UserID)
 
+	cmd.Args = []string{feed.Url}
+	err = handlerFollow(s, cmd)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
