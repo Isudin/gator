@@ -181,3 +181,41 @@ func handlerListFeeds(s *state, _ command) error {
 
 	return nil
 }
+
+func handlerFollow(s *state, cmd command) error {
+	if len(cmd.Args) < 1 {
+		return fmt.Errorf("%v command expects url argument", cmd.Name)
+	}
+
+	uri := cmd.Args[0]
+	_, err := url.ParseRequestURI(uri)
+	if err != nil {
+		return err
+	}
+
+	feed, err := s.db.GetFeedByUrl(context.Background(), uri)
+	if err != nil {
+		return err
+	}
+
+	user, err := s.db.GetUserByID(context.Background(), feed.UserID)
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateFeedFollowParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserID:    user.ID,
+		FeedID:    feed.ID,
+	}
+
+	feedFollow, err := s.db.CreateFeedFollow(context.Background(), params)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Feed %v of user %v followed\n", feedFollow.FeedName, feedFollow.UserName)
+	return nil
+}
