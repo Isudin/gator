@@ -46,7 +46,8 @@ func registerHandlers(cmds *commands) {
 	cmds.register("agg", handlerAggregate)
 	cmds.register("addfeed", handlerAddFeed)
 	cmds.register("feeds", handlerListFeeds)
-	cmds.register("following", handlerFollow)
+	cmds.register("follow", handlerFollow)
+	cmds.register("following", handlerFollowing)
 }
 
 func runCommands(cmds *commands) {
