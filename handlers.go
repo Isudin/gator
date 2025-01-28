@@ -236,3 +236,18 @@ func handlerFollowing(s *state, cmd command, user database.User) error {
 
 	return nil
 }
+
+func handlerUnfollow(s *state, cmd command, user database.User) error {
+	if len(cmd.Args) < 1 {
+		return fmt.Errorf("%v command expects url argument", cmd.Name)
+	}
+
+	uri := cmd.Args[0]
+	_, err := url.ParseRequestURI(uri)
+	if err != nil {
+		return err
+	}
+
+	params := database.DeleteFeedFollowParams{UserID: user.ID, Url: uri}
+	return s.db.DeleteFeedFollow(context.Background(), params)
+}
