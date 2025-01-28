@@ -200,7 +200,7 @@ func handlerFollow(s *state, cmd command) error {
 		return err
 	}
 
-	currentUser, err := s.db.GetUserByName(context.Background(), s.cfg.CurrentUser)
+	currentUser, err := s.db.GetUser(context.Background(), s.cfg.CurrentUser)
 	if err != nil {
 		return err
 	}
