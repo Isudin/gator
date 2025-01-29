@@ -6,7 +6,6 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/Isudin/gator/feed"
 	"github.com/Isudin/gator/internal/database"
 	"github.com/google/uuid"
 )
@@ -95,28 +94,25 @@ func handlerUsers(s *state, _ command) error {
 }
 
 func handlerAggregate(s *state, cmd command) error {
-	// if len(cmd.Args) < 1 {
-	// 	return fmt.Errorf("%v command expects rss link argument", cmd.Name)
-	// }
+	if len(cmd.Args) < 1 {
+		return fmt.Errorf("%v command expects time argument", cmd.Name)
+	}
 
-	// uri := cmd.Args[0]
-	uri := "https://www.wagslane.dev/index.xml"
-	_, err := url.ParseRequestURI(uri)
+	timeBetweenRequests := cmd.Args[0]
+	duration, err := time.ParseDuration(timeBetweenRequests)
 	if err != nil {
-		return err
+		return fmt.Errorf("%v; error parsing time argument", err)
 	}
 
-	feed, err := feed.FetchFeed(context.Background(), uri)
-	if err != nil {
-		return err
-	}
+	fmt.Printf("Collecting feeds every %v\n", timeBetweenRequests)
 
-	fmt.Printf("%v - %v\n", feed.Channel.Title, feed.Channel.Description)
-	for _, item := range feed.Channel.Item {
-		fmt.Printf("%v\n%v\n\n", item.Title, item.Description)
+	ticker := time.NewTicker(duration)
+	for ; ; <-ticker.C {
+		err := scrapeFeeds(s)
+		if err != nil {
+			return err
+		}
 	}
-	//fmt.Println(feed)
-	return nil
 }
 
 func handlerAddFeed(s *state, cmd command, user database.User) error {
