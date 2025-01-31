@@ -8,7 +8,7 @@ To install, run ***go install*** command from repo's root folder.
 
 To configure the app, create ***.gatorconfig.json*** file in your home directory.
 It should contain ***db_url*** key containing a postgres db connection string
-and ***current_user_name*** containing empty string or any text.
+and ***current_user_name*** key containing empty string or any text.
 
 Commands:
 -- register - register a new user
