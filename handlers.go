@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/Isudin/gator/internal/database"
@@ -246,4 +247,31 @@ func handlerUnfollow(s *state, cmd command, user database.User) error {
 
 	params := database.DeleteFeedFollowParams{UserID: user.ID, Url: uri}
 	return s.db.DeleteFeedFollow(context.Background(), params)
+}
+
+func handlerBrowse(s *state, cmd command, user database.User) error {
+	limit := 2
+	if len(cmd.Args) >= 1 {
+		parsedNumber, err := strconv.Atoi(cmd.Args[0])
+		if err != nil {
+			return fmt.Errorf("parameter should be an integer")
+		}
+
+		limit = parsedNumber
+	}
+
+	params := database.GetPostsForUserParams{
+		UserID: user.ID,
+		Limit:  int32(limit),
+	}
+	posts, err := s.db.GetPostsForUser(context.Background(), params)
+	if err != nil {
+		return err
+	}
+
+	for _, post := range posts {
+		fmt.Printf("%v: \n%v\n\n", post.Title, post.Description)
+	}
+
+	return nil
 }
