@@ -10,15 +10,15 @@ To configure the app, create ***.gatorconfig.json*** file in your home directory
 It should contain ***db_url*** key containing a postgres db connection string
 and ***current_user_name*** key containing empty string or any text.
 
-Commands:
--- register - register a new user
--- login - login to an existing user
--- reset - reset the database
--- users - list users
--- addfeed - add new feed
--- agg - aggregate feeds
--- feeds - list feeds
--- follow - follow a feed
--- unfollow - unfollow a feed
--- following - list feeds followed by current user
--- browse - list posts
+Commands:<br/>
+-- register - register a new user<br/>
+-- login - login to an existing user<br/>
+-- reset - reset the database<br/>
+-- users - list users<br/>
+-- addfeed - add new feed<br/>
+-- agg - aggregate feeds<br/>
+-- feeds - list feeds<br/>
+-- follow - follow a feed<br/>
+-- unfollow - unfollow a feed<br/>
+-- following - list feeds followed by current user<br/>
+-- browse - list posts<br/>
